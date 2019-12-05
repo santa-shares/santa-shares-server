@@ -7,25 +7,39 @@ import models
 
 logger = logging.getLogger(__name__)
 
-public_user_fields = {
+user_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
     "balance" : fields.String
 }
 
-private_user_fields = {
+user_register_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
     "balance" : fields.String,
-    "token" : fields.String
+    "token" : fields.String,
+}
+
+item_fields = {
+    "item_id" : fields.Integer(attribute="item_id"),
+    "item_name" : fields.String(attribute="item.name"),
+    "amount" : fields.Integer,
+    "price" : fields.Integer,
+}
+
+user_status_fields = {
+    "user_id" : fields.Integer(attribute="id"),
+    "user_name" : fields.String,
+    "balance" : fields.String,
+    'items': fields.List(fields.Nested(item_fields))
 }
 
 class Users(Resource):
-    @marshal_with(public_user_fields)
+    @marshal_with(user_fields)
     def get(self):
         return models.User.query.all(), 200
 
-    @marshal_with(private_user_fields)
+    @marshal_with(user_register_fields)
     def post(self):
         user_name = request.json.get('user_name')
         if user_name is None: abort(400, "No [user_name] provided.")
@@ -41,19 +55,13 @@ class Users(Resource):
             abort(500)
 
 class User(Resource):
+    @marshal_with(user_status_fields)
     def get(self, user_id=None):
         if user_id is None: abort(400)
-        return [{
-                "user_id" : user.id,
-                "user_name" : user.user_name,
-                "balance" : user.balance,
-                "items" : [{
-                    "item_id" : user_item.item_id,
-                    "item_name" : user_item.item.name,
-                    "amount" : user_item.amount,
-                    "price" : user_item.item.get_current_price(),
-            } for user_item in user.items]
-        } for user in models.User.query.filter_by(id=user_id)]
+        user = models.User.query.filter_by(id=user_id).first()
+        for user_item in user.items:
+            user_item.price = user_item.item.get_current_price()
+        return user
 
 api.add_resource(Users, "/users")
 api.add_resource(User, "/users/<int:user_id>")
