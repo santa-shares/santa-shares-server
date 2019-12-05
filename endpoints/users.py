@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 user_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
-    "balance" : fields.String
+    "balance" : fields.Integer
 }
 
 user_register_fields = {
