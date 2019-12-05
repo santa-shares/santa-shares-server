@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 item_fields = {
     "item_id" : fields.Integer(attribute="id"),
     "item_name" : fields.String(attribute="name"),
-    "price" : fields.Integer(attribute=lambda item: item.get_current_price()),
+    #"price" : fields.Integer(attribute=lambda item: item.get_current_price()),
     "amount" : fields.Integer
 }
 
