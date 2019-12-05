@@ -16,7 +16,7 @@ user_fields = {
 user_register_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
-    "balance" : fields.String,
+    "balance" : fields.Integer,
     "token" : fields.String,
 }
 
@@ -30,7 +30,7 @@ item_fields = {
 user_status_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
-    "balance" : fields.String,
+    "balance" : fields.Integer,
     'items': fields.List(fields.Nested(item_fields))
 }
 
