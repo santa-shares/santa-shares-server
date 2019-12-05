@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 user_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
-    "balance" : fields.Integer
+    "balance" : fields.Integer,
+    "stock_value" : fields.Integer,
+    "total" : fields.Integer
 }
 
 user_register_fields = {
@@ -37,7 +39,11 @@ user_status_fields = {
 class Users(Resource):
     @marshal_with(user_fields)
     def get(self):
-        return models.User.query.all(), 200
+        users = models.User.query.all() 
+        for user in users:
+            user.stock_value = sum([user_item.item.get_current_price() for user_item in user.items])
+            user.total = user.balance + user.stock_value
+        return users, 200
 
     @marshal_with(user_register_fields)
     def post(self):
