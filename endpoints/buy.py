@@ -4,7 +4,6 @@ from flask_restful import Resource
 from endpoints import api
 from extensions import db, auth
 from models import UserItem, Item
-from tools import error
 
 logger = logging.getLogger(__name__)
 

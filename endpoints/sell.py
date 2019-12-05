@@ -33,12 +33,11 @@ class Sell(Resource):
             if user_item.amount == 0:
                 db.session.remove(user_item)
             db.session.commit()
+            return 200
 
         except Exception as e:
             db.session.rollback()
             logger.error(e)
             abort(500)
-        
-        return 200
 
 api.add_resource(Sell, "/sell")

@@ -1,7 +1,6 @@
 import logging, os, json, logging, math, urllib, uuid, datetime, random
 from flask import Flask, escape, jsonify, request, abort, g
 from models import User, UserItem, Item
-from tools import error
 from extensions import db, auth
 from endpoints import api_blueprint
 
@@ -28,7 +27,7 @@ def verify_token(token):
 
 @auth.error_handler
 def auth_error():
-    return error(401, "Access Denied.")
+    return abort(401, "Access Denied.")
 
 @app.route("/")
 def index():
