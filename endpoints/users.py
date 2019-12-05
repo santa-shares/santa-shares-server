@@ -41,7 +41,6 @@ class Users(Resource):
             abort(500)
 
 class User(Resource):
-    @marshal_with
     def get(self, user_id=None):
         if user_id is None: abort(400)
         return [{
