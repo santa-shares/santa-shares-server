@@ -1,7 +1,6 @@
-import logging, json
+import logging, json, models
 from flask import request, g, abort
 from flask_restful import Resource, marshal_with, fields
-import models
 from tools import error
 from extensions import auth, db
 from endpoints import api
@@ -21,6 +20,7 @@ class Items(Resource):
         return models.Item.query.all()
 
 class Item(Resource):
+    @marshal_with(item_fields)
     def get(self, item_id=None):
         if item_id is None: abort(404)
         return models.Item.query.filter_by(id=item_id).first()
