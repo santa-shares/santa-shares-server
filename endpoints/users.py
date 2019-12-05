@@ -41,7 +41,7 @@ class Users(Resource):
     def get(self):
         users = models.User.query.all() 
         for user in users:
-            user.stock_value = sum([user_item.item.get_current_price() for user_item in user.items])
+            user.stock_value = sum([user_item.item.get_current_price() * user_item.amount for user_item in user.items])
             user.total = user.balance + user.stock_value
         return users, 200
 
