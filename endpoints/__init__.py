@@ -6,5 +6,6 @@ api_blueprint = Blueprint("api", __name__, url_prefix='/api')
 api = Api(api_blueprint, errors=errors)
 
 from . import buy
+from . import sell
 from . import items
 from . import users
