@@ -1,0 +1,10 @@
+# Ignore py files
+__pycache__/
+
+# ignore secret files
+secrets.json
+
+# Databases
+*.db
+
+debug/
