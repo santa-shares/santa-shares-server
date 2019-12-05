@@ -1,3 +1,4 @@
+import logging
 from flask import request, g, abort
 from flask_restful import Resource
 from extensions import auth, db
