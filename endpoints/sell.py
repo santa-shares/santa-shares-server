@@ -31,7 +31,7 @@ class Sell(Resource):
             user_item.item.amount += sell_amount
             user_item.amount -= sell_amount
             if user_item.amount == 0:
-                db.session.remove(user_item)
+                db.session.delete(user_item)
             db.session.commit()
             return 200
 
