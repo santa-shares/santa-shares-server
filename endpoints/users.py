@@ -52,7 +52,7 @@ class Users(Resource):
         if models.User.query.filter_by(user_name=user_name).count() > 0: abort(400, "[user_name] already exists.")
 
         try:
-            user = models.User(user_name=user_name, email="test@fnc.co.uk", token=str(uuid.uuid4()), balance=1000_00) 
+            user = models.User(user_name=user_name, token=str(uuid.uuid4()), balance=1000_00) 
             db.session.add(user)
             db.session.commit()
             return user, 201

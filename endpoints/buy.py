@@ -1,9 +1,9 @@
-import logging, json
+import logging, json, datetime
 from flask import g, abort, request
 from flask_restful import Resource
 from endpoints import api
 from extensions import db, auth
-from models import UserItem, Item
+from models import UserItem, Item, UserLog
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class Buy(Resource):
         if purchase_cost > g.current_user.balance: abort(400, f"Not enough cash for purchase. You need [{purchase_cost}] when you have [{g.current_user.balance}]")
 
         try:
-            user_item = UserItem.query.filter_by(item_id=item_id).first()
+            user_item = next((user_item for user_item in g.current_user.items if user_item.item_id == item_id), None)
             if user_item is None:
                 user_item = UserItem(user_id = g.current_user.id, item_id = item_id, amount = purchase_amount)
                 db.session.add(user_item)
@@ -36,6 +36,9 @@ class Buy(Resource):
 
             g.current_user.balance -= purchase_cost
             item.amount -= purchase_amount
+
+            user_log = UserLog(user_id=g.current_user.id, item_id=item_id, amount=purchase_amount,buy_sell=True,datetime=datetime.datetime.now())
+            db.session.add(user_log)
             db.session.commit()
             return 200 
         
