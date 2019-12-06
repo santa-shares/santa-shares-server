@@ -53,7 +53,7 @@ class Users(Resource):
 
         # how many users have the same ip
         ip_address = request.remote_addr
-        if models.User.query.filter_by(ip_address=ip_address).count(): abort(400, "Too many accounts have been registered with this ip. Delete some accounts then try again.")
+        if models.User.query.filter_by(ip_address=ip_address).count() > 10: abort(400, "Too many accounts have been registered with this ip. Delete some accounts then try again.")
 
         try:
             user = models.User(
