@@ -20,6 +20,6 @@ class Item(db.Model):
         return self.get_price(time)
 
     def get_price(self, time):
-        #noise_seed(self.cost_seed)
-        cost = self.cost_min + self.cost_range * 1 # noise(self.cost_offset + time / 2000)
+        noise_seed(self.cost_seed)
+        cost = self.cost_min + self.cost_range * noise(self.cost_offset + time / 2000)
         return max(1, int(cost))
