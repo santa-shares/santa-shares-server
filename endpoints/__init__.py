@@ -9,3 +9,4 @@ from . import buy
 from . import sell
 from . import items
 from . import users
+from . import history
