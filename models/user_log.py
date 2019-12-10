@@ -8,3 +8,5 @@ class UserLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     amount = db.Column(db.Integer, default=0, nullable=False)
+    balance = db.Column(db.Integer, default=0, nullable=False)
+    item = db.relationship("Item", uselist=False)

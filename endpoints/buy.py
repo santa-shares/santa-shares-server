@@ -37,7 +37,7 @@ class Buy(Resource):
             g.current_user.balance -= purchase_cost
             item.amount -= purchase_amount
 
-            user_log = UserLog(user_id=g.current_user.id, item_id=item_id, amount=purchase_amount,buy_sell=True,datetime=datetime.datetime.now())
+            user_log = UserLog(user_id=g.current_user.id, item_id=item_id, amount=purchase_amount,buy_sell=True,datetime=datetime.datetime.now(),balance=g.current_user.balance)
             db.session.add(user_log)
             db.session.commit()
             return 200 
