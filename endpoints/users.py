@@ -78,6 +78,9 @@ class User(Resource):
     def get(self, user_id=None):
         if user_id is None: abort(400)
         user = models.User.query.filter_by(id=user_id).first()
+        if user is None:
+            return None
+
         for user_item in user.items:
             user_item.price = user_item.item.get_current_price()
         return user
