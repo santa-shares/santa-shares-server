@@ -69,7 +69,7 @@ class Users(Resource):
                 token=str(uuid.uuid4()),
                 datetime_created=datetime.datetime.now(),
                 balance=1000_00,
-                ip_address=ip_address
+                ip_address="dontcare"
             ) 
             db.session.add(user)
             db.session.commit()
