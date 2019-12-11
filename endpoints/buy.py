@@ -19,7 +19,7 @@ class Buy(Resource):
         item = Item.query.filter_by(id=item_id).first()
         if item is None: return abort(400, f"The provided id [{item_id}] does not match an item in the database.")
            
-        purchase_amount = int(request.json.get('amount', 1))
+        purchase_amount = max(int(request.json.get('amount', 1)))
         if item.amount < purchase_amount: return abort(400, f"Not enough items for sale. Requested amount is [{purchase_amount}] yet stock is [{item.amount}].")
            
         item_price = item.get_current_price()
