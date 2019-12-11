@@ -18,7 +18,7 @@ class Sell(Resource):
         user_item = next((user_item for user_item in g.current_user.items if user_item.item_id == item_id), None)
         if user_item is None: abort(400, f"You don't own any items with id [{item_id}]") 
 
-        sell_amount = request.json.get("amount", 1)
+        sell_amount = max(request.json.get("amount", 1))
         if sell_amount > user_item.amount: abort(400, f"You don't have [{sell_amount}] of item [{user_item.item.name}] to sell. You have [{user_item.amount}] in stock.")
 
         transaction_fee_per_item = 0
