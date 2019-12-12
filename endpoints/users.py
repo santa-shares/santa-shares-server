@@ -110,9 +110,10 @@ class UserHistory(Resource):
         index = 0
         current_user_history = None
         next_user_history = next(iter(user_history), None)
-        
+        data_point_index = 0
         items = {}
-        while time < end_time:
+        while time < end_time and data_point_index < 100:
+            data_point_index += 1
             while next_user_history is not None and time > next_user_history.datetime:
                 current_user_history = next_user_history
                 index += 1
