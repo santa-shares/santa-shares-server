@@ -98,14 +98,15 @@ class UserHistory(Resource):
 
     @marshal_with(user_history_fields)
     def get(self, user_id):
-        print("Whats")
         user = models.User.query.filter_by(id=user_id).first()
         if user is None: abort(400, "No user with ID.")
+
         start_time = user.datetime_created
         time = start_time
         end_time = datetime.datetime.now()
+
         data = []
-        time_delta = datetime.timedelta(seconds=10)
+        time_delta = datetime.timedelta(minutes=30)
         user_history = models.UserLog.query.filter_by(user_id=user_id).order_by(models.UserLog.datetime).all()
         index = 0
         current_user_history = None
