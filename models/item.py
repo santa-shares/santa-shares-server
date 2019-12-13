@@ -18,7 +18,7 @@ class Item(db.Model):
 
     def get_current_price(self):
         minutes = Item.get_minutes_since_reference(datetime.datetime.now())
-        if ((not self.last_price_idx is None) and self.last_price_idx == minutes):
+        if ((self.last_price_idx is not None) and self.last_price_idx == minutes):
             return self.last_price
         else:
             price = self.get_price_at_minutes(minutes)
