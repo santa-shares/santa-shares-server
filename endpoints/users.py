@@ -6,7 +6,6 @@ from extensions import db, auth
 import models
 
 logger = logging.getLogger(__name__)
-
 user_fields = {
     "user_id" : fields.Integer(attribute="id"),
     "user_name" : fields.String,
