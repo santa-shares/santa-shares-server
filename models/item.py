@@ -13,10 +13,18 @@ class Item(db.Model):
     cost_min = db.Column(db.Integer, nullable=False)
     cost_range = db.Column(db.Integer, nullable=False)
     cost_offset = db.Column(db.Integer, nullable=False)
+    last_price = db.Column(db.Integer, nullable=True)
+    last_price_idx = db.Column(db.Integer, nullable=True)
 
     def get_current_price(self):
         minutes = Item.get_minutes_since_reference(datetime.datetime.now())
-        return self.get_price_at_minutes(minutes)
+        if (self.last_price_idx == minutes):
+            return self.last_price
+        else:
+            price = self.get_price_at_minutes(minutes)
+            self.last_price = price
+            self.last_price_idx = minutes
+            return price
 
     def get_price_at(self, time):
         minutes = Item.get_minutes_since_reference(time)
