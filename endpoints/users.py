@@ -35,7 +35,6 @@ user_status_fields = {
     'items': fields.List(fields.Nested(item_fields))
 }
 
-
 user_history_fields = {
     "time" : fields.DateTime,
     "balance" : fields.Integer,
@@ -57,10 +56,6 @@ class Users(Resource):
         user_name = request.json.get('user_name')
         if user_name is None: abort(400, "No [user_name] provided.")
         if models.User.query.filter_by(user_name=user_name).count() > 0: abort(400, "[user_name] already exists.")
-
-        # how many users have the same ip
-        # ip_address = request.remote_addr
-        # if models.User.query.filter_by(ip_address=ip_address).count() > 10: abort(400, "Too many accounts have been registered with this ip. Delete some accounts then try again.")
 
         try:
             user = models.User(
@@ -127,7 +122,6 @@ class UserHistory(Resource):
                     if items[current_user_history.item] == 0:
                         del items[current_user_history.item]
             
-            # stock value is price of all items at this point in time.
             stock_value = sum([item.get_price_at(time) * items[item] for item in items])
 
             data.append({
