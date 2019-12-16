@@ -17,8 +17,8 @@ class Items(Resource):
     @marshal_with(item_fields)
     def get(self):
         items = models.Item.query.all()
-        for item in items:
-            item.price = item.get_current_price()
+        for item in items: item.price = item.get_current_price()
+        db.session.commit()
         return items
 
 class Item(Resource):
