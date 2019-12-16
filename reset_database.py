@@ -13,7 +13,7 @@ with app.app_context():
     
     for line in lines:
         item = Item(name=line.strip())
-        item.amount = random.randint(1, 10)
+        item.amount = random.randint(1, 50)
         item.cost_min = int(random.random() * 50_00)
         item.cost_range = int(random_gaussian(50, 50_00))
         item.cost_seed = int(random.randint(0, 1000_00))
