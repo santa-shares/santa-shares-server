@@ -16,11 +16,13 @@ item_fields = {
 class Items(Resource):
     @marshal_with(item_fields)
     def get(self):
-        logger.info(f"Querying items {datetime.datetime.now()}")
+        logger.info(f"Querying items...")
         items = models.Item.query.all()
-        logger.info(f"Querying items....done {datetime.datetime.now()}")
+        logger.info(f"Getting price...")
         for item in items: item.price = item.get_current_price()
+        logger.info(f"Commiting...")
         db.session.commit()
+        logger.info(f"Done.")
         return items
 
 class Item(Resource):
