@@ -25,7 +25,7 @@ class Sell(Resource):
         transaction_fee = transaction_fee_per_item * sell_amount
         item_price = user_item.item.get_current_price()
         sell_price = sell_amount * item_price
-        if g.current_user.balance + sell_price < transaction_fee: abort(400, f"You cannot afford the transaction fee for this sale. The fee is [{transaction_fee}] and you will have [{g.current_user.balance + sell_price}] after sale.")
+        #if g.current_user.balance + sell_price < transaction_fee: abort(400, f"You cannot afford the transaction fee for this sale. The fee is [{transaction_fee}] and you will have [{g.current_user.balance + sell_price}] after sale.")
 
         try:
             g.current_user.balance += sell_price - transaction_fee
