@@ -28,10 +28,6 @@ class Item(db.Model):
         return self.get_price_at_minutes(minutes) 
 
     def get_price_at_minutes(self, minutes):
-        if self.id == 115:
-            return 0
-        if self.id == 108:
-            return 100_00
         noise_seed(self.cost_seed)
         cost = self.cost_min + self.cost_range * noise(self.cost_offset + minutes / 2000)
         return max(1, int(cost))
