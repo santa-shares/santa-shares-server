@@ -54,7 +54,7 @@ class Users(Resource):
                 user.total = user.balance + user.stock_value
             return users, 200
         except Exception as e:
-            abort(500, e.message)
+            abort(500, str(e))
 
     @marshal_with(user_register_fields)
     def post(self):
