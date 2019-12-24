@@ -45,13 +45,16 @@ user_history_fields = {
 class Users(Resource):
     @marshal_with(user_fields)
     def get(self):
-        users = models.User.query.all()
-        all_user_items = models.UserItem.query.all()
-        for user in users:
-            user_items = [user_item for user_item in all_user_items if user_item.user_id == user.id]
-            user.stock_value = sum((user_item.item.get_current_price() * user_item.amount for user_item in user_items))
-            user.total = user.balance + user.stock_value
-        return users, 200
+        try:
+            users = models.User.query.all()
+            all_user_items = models.UserItem.query.all()
+            for user in users:
+                user_items = [user_item for user_item in all_user_items if user_item.user_id == user.id]
+                user.stock_value = sum((user_item.item.get_current_price() * user_item.amount for user_item in user_items))
+                user.total = user.balance + user.stock_value
+            return users, 200
+        except Exception as e:
+            abort(500, e.inner_message)
 
     @marshal_with(user_register_fields)
     def post(self):
