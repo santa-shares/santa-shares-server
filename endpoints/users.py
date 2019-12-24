@@ -48,19 +48,20 @@ class Users(Resource):
         try:
             users = models.User.query.all()
             all_user_items = models.UserItem.query.all()
-            item_ids = set([user_item.item_id for user_item in all_user_items])
-            items = {}
-            for item in models.Item.query.filter(models.Item.id.in_(item_ids)).all():
-                items[item.id] = item
-                
+            items = models.Item.query.all()
+
+            item_lookup = {}
+            for item in items:
+                item_lookup[item.id] = item
+
             for user_item in all_user_items:
-                user_item.item = items[user_item.item_id]
+                user_item.item = item_lookup[user_item.item_id]
             
             for user in users:
                 user_items = [user_item for user_item in all_user_items if user_item.user_id == user.id]
                 user.stock_value = sum((user_item.item.get_current_price() * user_item.amount for user_item in user_items))
                 user.total = user.balance + user.stock_value
-                
+
             return users, 200
         except Exception as e:
             abort(500, str(e))
@@ -96,8 +97,18 @@ class User(Resource):
         if user_id is None: abort(400, "Must provide a user id")
         user = models.User.query.filter_by(id=user_id).first()
         if user is None: abort(400, "No user found with that id.")
+
         user_items = models.UserItem.query.filter_by(user_id=user_id).all()
-        for user_item in user_items: user_item.price = user_item.item.get_current_price()
+        item_ids = [user_item.id for user_item in user_items]
+        items = models.Item.query.all()
+
+        item_lookup = {}
+        for item in items:
+            item_lookup[item.id] = item
+
+        for user_item in user_items:
+            user_item.item = item_lookup[user_item.item_id]
+            user_item.price = user_item.item.get_current_price()
         return user
 
 class UserHistory(Resource):
