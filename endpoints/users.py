@@ -100,7 +100,6 @@ class User(Resource):
 
         user_items = models.UserItem.query.filter_by(user_id=user_id).all()
         user.user_items = user_items
-        item_ids = [user_item.id for user_item in user_items]
         items = models.Item.query.all()
 
         item_lookup = {}
