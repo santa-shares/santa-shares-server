@@ -3,7 +3,7 @@ from flask import request, g, abort
 from flask_restful import Resource
 from extensions import auth, db
 from endpoints import api
-from models import UserLog
+from models import UserLog, UserItem
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class Sell(Resource):
         item_id = request.json.get("item_id", None)
         if item_id is None: abort(400, "No item_id provided. You must provide an item_id to sell.")
 
-        user_item = next((user_item for user_item in g.current_user.items if user_item.item_id == item_id), None)
+        user_item = UserItem.query.filter_by(user_id=g.current_user.id, item_id=item_id).first()
         if user_item is None: abort(400, f"You don't own any items with id [{item_id}]") 
 
         sell_amount = max(int(request.json.get("amount", 1)), 1)

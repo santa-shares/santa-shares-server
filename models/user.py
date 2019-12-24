@@ -8,4 +8,3 @@ class User(db.Model):
     ip_address = db.Column(db.String, nullable=False)
     token = db.Column(db.String, unique=True, nullable=False)
     balance = db.Column(db.Integer, default=0, nullable=False)
-    items = db.relationship("UserItem")

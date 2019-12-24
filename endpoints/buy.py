@@ -27,7 +27,7 @@ class Buy(Resource):
         if purchase_cost > g.current_user.balance: abort(400, f"Not enough cash for purchase. You need [{purchase_cost}] when you have [{g.current_user.balance}]")
 
         try:
-            user_item = next((user_item for user_item in g.current_user.items if user_item.item_id == item_id), None)
+            user_item = UserItem.query.filter_by(user_id=g.current_user.id, item_id=item_id).first()
             if user_item is None:
                 user_item = UserItem(user_id = g.current_user.id, item_id = item_id, amount = purchase_amount)
                 db.session.add(user_item)

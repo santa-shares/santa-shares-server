@@ -45,9 +45,11 @@ user_history_fields = {
 class Users(Resource):
     @marshal_with(user_fields)
     def get(self):
-        users = models.User.query.all() 
+        users = models.User.query.all()
+        all_user_items = models.UserItem.query.all()
         for user in users:
-            user.stock_value = sum([user_item.item.get_current_price() * user_item.amount for user_item in user.items])
+            user_items = [user_item for user_item in all_user_items if user_item.user_id == user.id]
+            user.stock_value = sum((user_item.item.get_current_price() * user_item.amount for user_item in user_items))
             user.total = user.balance + user.stock_value
         return users, 200
 
@@ -79,13 +81,11 @@ class Users(Resource):
 class User(Resource):
     @marshal_with(user_status_fields)
     def get(self, user_id=None):
-        if user_id is None: abort(400)
+        if user_id is None: abort(400, "Must provide a user id")
         user = models.User.query.filter_by(id=user_id).first()
-        if user is None:
-            return None
-
-        for user_item in user.items:
-            user_item.price = user_item.item.get_current_price()
+        if user is None: abort(400, "No user found with that id.")
+        user_items = models.UserItem.query.filter_by(user_id=user_id).all()
+        for user_item in user_items: user_item.price = user_item.item.get_current_price()
         return user
 
 class UserHistory(Resource):
