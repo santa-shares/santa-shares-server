@@ -109,7 +109,7 @@ class User(Resource):
         for user_item in user_items:
             user_item.item = item_lookup[user_item.item_id]
             user_item.price = user_item.item.get_current_price()
-        return user
+        return user, 200
 
 class UserHistory(Resource):
 
